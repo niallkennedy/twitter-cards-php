@@ -78,3 +78,7 @@ echo $card->asHTML();
 The title property is intentionally set as blank. In this example Instagram has a photo description but no title.
 
 An image is a required property of a photo card. A specified image must be at least 280 pixels wide and 150 pixels tall. Your image may be resized up to a width of 560 pixels; plan your content accordingly.
+
+## Player
+
+Not currently supported. Soon.
