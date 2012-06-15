@@ -30,13 +30,13 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var array
 	 */
-	public static $allowed_card_types = array( 'summary', 'photo' /*, 'player' */ );
+	public static $allowed_card_types = array( 'summary', 'photo', 'player' );
 
 	/**
 	 * Create a new Twitter Card object, optionally overriding the default card type of "summary"
 	 *
 	 * @since 1.0
-	 * @param string $card_type The card type. one of "summary", "photo"
+	 * @param string $card_type The card type. one of "summary", "photo", "player"
 	 */
 	public function __construct( $card_type = '' ) {
 		if ( is_string( $card_type ) && in_array( $card_type, self::$allowed_card_types, true ) )
@@ -158,6 +158,65 @@ class Twitter_Card {
 	}
 
 	/**
+	 * Test if passed parameter is a URL string with HTTPS scheme
+	 *
+	 * @since 1.0
+	 * @param string $url URL
+	 * @return bool true if URL can be parsed and scheme is https
+	 */
+	public static function is_https_url( $url ) {
+		if ( ! ( is_string( $url ) && $url ) )
+			return false;
+
+
+		// parse_url will test scheme + full URL validity vs. just checking if string begins with "https://"
+		try {
+			$scheme = parse_url( $url, PHP_URL_SCHEME );
+			if ( is_string( $scheme ) && strtolower( $scheme ) === 'https' )
+				return true;
+		} catch( Exception $e ) {} // E_WARNING in PHP < 5.3.3
+
+		return false;
+	}
+
+	/**
+	 * HTTPS URL of an HTML suitable for display in an iframe
+	 * If the iframe width is greater than 435 pixels Twitter will resize to fit a 435 pixel width column
+	 *
+	 * @since 1.0
+	 * @param string $url HTTPS URL to iframe player
+	 * @param int $width width in pixels preferred by iframe URL
+	 * @param int $height height in pixels preferred by iframe URL
+	 * @return Twitter_Card for chaining
+	 */
+	public function setVideo( $url, $width = 0, $height = 0 ) {
+		if ( ! self::is_https_url( $url ) )
+			return;
+
+		$video = array( 'url' => $url );
+		if ( is_int( $width ) && is_int( $height ) && $width > 0 && $height >0 ) {
+			$video['width'] = $width;
+			$video['height'] = $height;
+		}
+		$this->video = $video;
+		return $this;
+	}
+
+	/**
+	 * Link to a direct MP4 file with H.264 Baseline Level 3 video and AAC LC audio tracks
+	 * Videos up to 640x480 pixels supported
+	 *
+	 * @param string $url URL
+	 * @return Twitter_Card for chaining
+	 */
+	public function setVideoStream( $url ) {
+		if ( ! self::is_https_url( $url ) )
+			return;
+
+		$this->video_stream = array( 'url' => $url, 'type' => 'video/mp4; codecs=&quot;avc1.42E01E1, mpa.40.2&quot;' );
+	}
+
+	/**
 	 * Build a user object based on username and id inputs
 	 *
 	 * @since 1.0
@@ -245,6 +304,21 @@ class Twitter_Card {
 			if ( array_key_exists( 'width', $this->image ) && array_key_exists( 'height', $this->image ) ) {
 				$t['image:width'] = $this->image['width'];
 				$t['image:height'] = $this->image['height'];
+			}
+		}
+
+		// video on a photo card does not make much sense
+		if ( $this->card !== 'photo' && isset( $this->video ) && array_key_exists( 'url', $this->video ) ) {
+			$t['player'] = $this->video['url'];
+			if ( array_key_exists( 'width', $this->video ) && array_key_exists( 'height', $this->video ) ) {
+				$t['player:width'] = $this->video['width'];
+				$t['player:height'] = $this->video['height'];
+			}
+
+			// no video stream without a main video player. content type required.
+			if ( isset( $this->video_stream ) && array_key_exists( 'url', $this->video_stream ) && array_key_exists( 'type', $this->video_stream ) ) {
+				$t['player:stream'] = $this->video_stream['url'];
+				$t['player:stream:content_type'] = $this->video_stream['type'];
 			}
 		}
 
