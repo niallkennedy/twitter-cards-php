@@ -24,14 +24,21 @@ if ( ! class_exists( 'Twitter_Card' ) )
 
 // build a card
 $card = new Twitter_Card();
-$card->setSiteAccount( 'nytimes', '807095' );
-$card->setCreatorAccount( 'SarahMaslinNir', '24134103' );
 $card->setURL( 'http://www.nytimes.com/2012/02/19/arts/music/amid-police-presence-fans-congregate-for-whitney-houstons-funeral-in-newark.html' );
 $card->setTitle( 'Parade of Fans for Houston\'s Funeral' );
 $card->setDescription( 'NEWARK - The guest list and parade of limousines with celebrities emerging from them seemed more suited to a red carpet event in Hollywood or New York than than a gritty stretch of Sussex Avenue near the former site of the James M. Baxter Terrace public housing project here.' );
+// optional
 $card->setImage( 'http://graphics8.nytimes.com/images/2012/02/19/us/19whitney-span/19whitney-span-articleLarge.jpg', 600, 330 );
+$card->setSiteAccount( 'nytimes', '807095' );
+$card->setCreatorAccount( 'SarahMaslinNir', '24134103' );
 
 // echo a string of <meta> elements
 echo $card->asHTML();
 ?>
 ```
+
+Image and Twitter account data are optional for Twitter Summary Cards. All other properties in the example above are required: URL, title, description.
+
+Define a Twitter account associated with an author or your site by passing a Twitter screenname and an optional Twitter user id. A user may change his screenname but his ID remains the same. You can look up numeric IDs by screen_name via the [Twitter user/show API](https://dev.twitter.com/docs/api/1/get/users/show). Example: [jack](https://api.twitter.com/1/users/show.json?screen_name=jack "Jack Dorsey Twitter profile expressed as JSON")
+
+Images must be at least 60x60 pixels. Images larger than 120x120 pixels will be resized and cropped. Help preserve aspect ratios by passing optional width and height parameters when defining your image.
