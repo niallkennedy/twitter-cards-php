@@ -148,7 +148,7 @@ class Twitter_Card {
 				return $this;
 
 			// minimum dimensions for photo cards
-			if ( isset( $this->card ) && $this->card === 'photo' && ( $width < 280 || $height < 150 ) )
+			if ( in_array( $this->card, array( 'photo', 'player' ), true ) && ( $width < 280 || $height < 150 ) )
 				return $this;
 
 			$image->width = $width;
