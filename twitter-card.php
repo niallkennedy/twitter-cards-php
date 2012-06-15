@@ -60,7 +60,6 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @param string $username Twitter username
 	 * @return bool true if valid else false
-	 * @todo regex this against Twitter username allowed characters
 	 */
 	public static function is_valid_username( $username ) {
 		if ( is_string( $username ) && $username )
@@ -373,6 +372,7 @@ class Twitter_Card {
 	/**
 	 * Build a single <meta> element from a name and value
 	 *
+	 * @since 1.0
 	 * @param string $name name attribute value
 	 * @param string|int $value value attribute value
 	 * @param bool $xml include a trailing slash for XML. encode attributes for XHTML in PHP 5.4+
