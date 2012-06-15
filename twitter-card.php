@@ -34,6 +34,14 @@ class Twitter_Card {
 	public static $allowed_card_types = array( 'summary', 'photo', 'player' );
 
 	/**
+	 * Only allow HTTP and HTTPs schemes in URLs
+	 *
+	 * @since 1.0
+	 * @var array
+	 */
+	public static $allowed_schemes = array( 'http', 'https' );
+
+	/**
 	 * Create a new Twitter Card object, optionally overriding the default card type of "summary"
 	 *
 	 * @since 1.0
@@ -52,6 +60,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @param string $username Twitter username
 	 * @return bool true if valid else false
+	 * @todo regex this against Twitter username allowed characters
 	 */
 	public static function is_valid_username( $username ) {
 		if ( is_string( $username ) && $username )
@@ -77,6 +86,41 @@ class Twitter_Card {
 	}
 
 	/**
+	 * Test if given URL is valid and matches allowed schemes
+	 *
+	 * @since 1.0
+	 * @param string $url URL to test
+	 * @param array $allowed_schemes one or both of http, https
+	 * @return bool true if URL can be parsed and scheme allowed, else false
+	 */
+	public static function is_valid_url( $url, $allowed_schemes = null ) {
+		if ( ! ( is_string( $url ) && $url ) )
+			return false;
+
+		if ( ! is_array( $allowed_schemes ) || empty( $allowed_schemes ) ) {
+			$schemes = self::$allowed_schemes;
+		} else {
+			$schemes = array();
+			foreach ( $allowed_schemes as $scheme ) {
+				if ( in_array( $scheme, self::$allowed_schemes, true ) )
+					$schemes[] = $scheme;
+			}
+
+			if ( empty( $schemes ) )
+				$schemes = self::$allowed_schemes;
+		}
+
+		// parse_url will test scheme + full URL validity vs. just checking if string begins with "https://"
+		try {
+			$scheme = parse_url( $url, PHP_URL_SCHEME );
+			if ( is_string( $scheme ) && in_array( strtolower( $scheme ), $schemes, true ) )
+				return true;
+		} catch( Exception $e ) {} // E_WARNING in PHP < 5.3.3
+
+		return false;
+	}
+
+	/**
 	 * Canonical URL. Basic check for string before setting
 	 *
 	 * @since 1.0
@@ -84,7 +128,7 @@ class Twitter_Card {
 	 * @return Twitter_Card for chaining
 	 */
 	public function setURL( $url ) {
-		if ( is_string( $url ) && $url )
+		if ( self::is_valid_url( $url ) )
 			$this->url = $url;
 		return $this;
 	}
@@ -137,7 +181,7 @@ class Twitter_Card {
 	 * @return Twitter_Card for chaining
 	 */
 	public function setImage( $url, $width = 0, $height = 0 ) {
-		if ( ! ( is_string( $url ) && $url ) )
+		if ( ! self::is_valid_url( $url ) )
 			return $this;
 		$image = new stdClass();
 		$image->url = $url;
@@ -160,27 +204,6 @@ class Twitter_Card {
 	}
 
 	/**
-	 * Test if passed parameter is a URL string with HTTPS scheme
-	 *
-	 * @since 1.0
-	 * @param string $url URL
-	 * @return bool true if URL can be parsed and scheme is https
-	 */
-	public static function is_https_url( $url ) {
-		if ( ! ( is_string( $url ) && $url ) )
-			return false;
-
-		// parse_url will test scheme + full URL validity vs. just checking if string begins with "https://"
-		try {
-			$scheme = parse_url( $url, PHP_URL_SCHEME );
-			if ( is_string( $scheme ) && strtolower( $scheme ) === 'https' )
-				return true;
-		} catch( Exception $e ) {} // E_WARNING in PHP < 5.3.3
-
-		return false;
-	}
-
-	/**
 	 * HTTPS URL of an HTML suitable for display in an iframe
 	 * Expected width and height of the iframe are required
 	 * If the iframe width is greater than 435 pixels Twitter will resize to fit a 435 pixel width column
@@ -192,7 +215,7 @@ class Twitter_Card {
 	 * @return Twitter_Card for chaining
 	 */
 	public function setVideo( $url, $width, $height ) {
-		if ( ! ( self::is_https_url( $url ) && is_int( $width ) && is_int( $height ) && $width > 0 && $height > 0 ) )
+		if ( ! ( self::is_valid_url( $url, array( 'https' ) ) && is_int( $width ) && is_int( $height ) && $width > 0 && $height > 0 ) )
 			return;
 
 		$video = new stdClass();
@@ -211,13 +234,14 @@ class Twitter_Card {
 	 * @return Twitter_Card for chaining
 	 */
 	public function setVideoStream( $url ) {
-		if ( ! ( isset( $this->video ) && self::is_https_url( $url ) ) )
-			return;
+		if ( ! ( isset( $this->video ) && self::is_valid_url( $url ) ) )
+			return $this;
 
 		$stream = new stdClass();
 		$stream->url = $url;
 		$stream->type = 'video/mp4; codecs=&quot;avc1.42E01E1, mpa.40.2&quot;';
 		$this->video->stream = $stream;
+		return $this;
 	}
 
 	/**
