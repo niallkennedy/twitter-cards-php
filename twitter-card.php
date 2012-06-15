@@ -99,8 +99,10 @@ class Twitter_Card {
 	public function setTitle( $title ) {
 		if ( is_string( $title ) ) {
 			$title = trim( $title );
-			if ( $title )
-				$this->title = $title;
+			// photo cards may explicitly declare an empty title
+			if ( ! $title && $this->card !== 'photo' )
+				return;
+			$this->title = $title;
 		}
 		return $this;
 	}
@@ -272,7 +274,7 @@ class Twitter_Card {
 	 * @return meta element or empty string if name or value not valid
 	 */
 	public static function build_meta_element( $name, $value, $xml = false ) {
-		if ( ! ( is_string( $name ) && $name && ( ( is_string( $value ) && $value ) || ( is_int( $value ) && $value > 0 ) ) ) )
+		if ( ! ( is_string( $name ) && $name && ( is_string( $value ) || ( is_int( $value ) && $value > 0 ) ) ) )
 			return '';
 		$flag = ENT_COMPAT;
 		// allow PHP 5.4 overrides
