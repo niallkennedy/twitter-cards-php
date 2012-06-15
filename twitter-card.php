@@ -240,7 +240,7 @@ class Twitter_Card {
 		// add an image
 		if ( isset( $this->image ) && is_array( $this->image ) && array_key_exists( 'url', $this->image ) ) {
 			$t['image'] = $this->image['url'];
-			if ( array_key_exists( 'width', $this->image ) && array_key_exists( 'height', $image ) ) {
+			if ( array_key_exists( 'width', $this->image ) && array_key_exists( 'height', $this->image ) ) {
 				$t['image:width'] = $this->image['width'];
 				$t['image:height'] = $this->image['height'];
 			}
