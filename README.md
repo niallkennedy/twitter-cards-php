@@ -13,6 +13,7 @@ A Twitter Card is a "summary" by default.
 Create a summary card like this:
 
 ![Twitter summary example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-summary_0.png)
+![Twitter summary example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-mobile-summary_0.png)
 
 By including Twitter Card markup in your `<head>`:
 
@@ -49,7 +50,8 @@ A "photo" card takes advantage of the full width of the content area.
 
 Create a photo card like this:
 
-![Twitter Card photo example](https://dev.twitter.com/sites/default/files/images_documentation/card-web-photo_0_0.png)
+![Twitter Card photo example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-photo_0_0.png)
+![Twitter Card photo example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-mobile-photo_0_0.png)
 
 By including Twitter Card markup in your `<head>`:
 
@@ -85,7 +87,8 @@ A "player" card creates a video preview from either an HTML iframe or a poster f
 
 Create a player card like this:
 
-![Twitter player card example](https://dev.twitter.com/sites/default/files/images_documentation/card-web-player_0.png)
+![Twitter player card example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-player_0.png)
+![Twitter player card example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/mobile-player_0.png)
 
 By including Twitter Card markup in your `<head>`:
 
