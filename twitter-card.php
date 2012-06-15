@@ -53,9 +53,9 @@ class Twitter_Card {
 	 * @return bool true if valid else false
 	 */
 	public static function is_valid_username( $username ) {
-		if ( ! is_string( $username ) || ! $username )
-			return false;
-		return true;
+		if ( is_string( $username ) && $username )
+			return true;
+		return false;
 	}
 
 	/**
