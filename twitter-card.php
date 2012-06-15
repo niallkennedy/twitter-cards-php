@@ -130,16 +130,17 @@ class Twitter_Card {
 	 * For summary cards images larger than 120x120 will be resized and cropped
 	 *
 	 * @since 1.0
-	 * @param string $image_url URL of an image representing content
+	 * @param string $url URL of an image representing content
 	 * @param int $width width of the specified image in pixels
 	 * @param int $height height of the specified image in pixels
 	 * @return Twitter_Card for chaining
 	 */
-	public function setImage( $image_url, $width = 0, $height = 0 ) {
-		if ( ! ( is_string( $image_url ) && $image_url ) )
+	public function setImage( $url, $width = 0, $height = 0 ) {
+		if ( ! ( is_string( $url ) && $url ) )
 			return $this;
-		$image = array( 'url' => $image_url );
-		if ( is_int( $width ) && is_int( $height ) && $width !== 0 && $height !== 0 ) {
+		$image = new stdClass();
+		$image->url = $url;
+		if ( is_int( $width ) && is_int( $height ) && $width > 0 && $height > 0 ) {
 			// prevent self-inflicted pain
 
 			// minimum dimensions for all card types
@@ -150,8 +151,8 @@ class Twitter_Card {
 			if ( isset( $this->card ) && $this->card === 'photo' && ( $width < 280 || $height < 150 ) )
 				return $this;
 
-			$image['width'] = $width;
-			$image['height'] = $height;
+			$image->width = $width;
+			$image->height = $height;
 		}
 		$this->image = $image;
 		return $this;
@@ -167,7 +168,6 @@ class Twitter_Card {
 	public static function is_https_url( $url ) {
 		if ( ! ( is_string( $url ) && $url ) )
 			return false;
-
 
 		// parse_url will test scheme + full URL validity vs. just checking if string begins with "https://"
 		try {
@@ -193,10 +193,11 @@ class Twitter_Card {
 		if ( ! self::is_https_url( $url ) )
 			return;
 
-		$video = array( 'url' => $url );
+		$video = new stdClass();
+		$video->url = $url;
 		if ( is_int( $width ) && is_int( $height ) && $width > 0 && $height >0 ) {
-			$video['width'] = $width;
-			$video['height'] = $height;
+			$video->width = $width;
+			$video->height = $height;
 		}
 		$this->video = $video;
 		return $this;
@@ -210,10 +211,13 @@ class Twitter_Card {
 	 * @return Twitter_Card for chaining
 	 */
 	public function setVideoStream( $url ) {
-		if ( ! self::is_https_url( $url ) )
+		if ( ! ( isset( $this->video ) && self::is_https_url( $url ) ) )
 			return;
 
-		$this->video_stream = array( 'url' => $url, 'type' => 'video/mp4; codecs=&quot;avc1.42E01E1, mpa.40.2&quot;' );
+		$stream = new stdClass();
+		$stream->url = $url;
+		$stream->type = 'video/mp4; codecs=&quot;avc1.42E01E1, mpa.40.2&quot;';
+		$this->video->stream = $stream;
 	}
 
 	/**
@@ -226,13 +230,14 @@ class Twitter_Card {
 	 */
 	public static function filter_account_info( $username, $id = '' ) {
 		if ( ! is_string( $username ) )
-			return array();
+			return null;
 		$username = ltrim( trim( $username ), '@' );
 		if ( ! ( $username && self::is_valid_username( $username ) ) )
-			return array();
-		$user = array( 'username' => $username );
+			return null;
+		$user = new stdClass();
+		$user->username = $username;
 		if ( $id && self::is_valid_id( $id ) )
-			$user['id'] = (string) $id;
+			$user->id = (string) $id;
 		return $user;
 	}
 
@@ -247,7 +252,7 @@ class Twitter_Card {
 	 */
 	public function setSiteAccount( $username, $id = '' ) {
 		$user = self::filter_account_info( $username, $id );
-		if ( is_array( $user ) && array_key_exists( 'username', $user ) )
+		if ( $user && isset( $user->username ) )
 			$this->site = $user;
 		return $this;
 	}
@@ -262,7 +267,7 @@ class Twitter_Card {
 	 */
 	public function setCreatorAccount( $username, $id = '' ) {
 		$user = self::filter_account_info( $username, $id );
-		if ( is_array( $user ) && array_key_exists( 'username', $user ) )
+		if ( $user && isset( $user->username ) )
 			$this->creator = $user;
 		return $this;
 	}
@@ -276,7 +281,9 @@ class Twitter_Card {
 	private function required_properties_exist() {
 		if ( ! ( isset( $this->url ) && isset( $this->title ) && isset( $this->description ) ) )
 			return false;
-		if ( $this->card === 'photo' && ! isset( $this->image ) )
+		if ( $this->card === 'photo' && ! ( isset( $this->image ) && isset( $this->image->url ) ) )
+			return false;
+		if ( $this->card === 'player' && ! ( isset( $this->video ) && isset( $this->video->url ) ) )
 			return false;
 		return true;
 	}
@@ -299,41 +306,41 @@ class Twitter_Card {
 		);
 
 		// add an image
-		if ( isset( $this->image ) && is_array( $this->image ) && array_key_exists( 'url', $this->image ) ) {
-			$t['image'] = $this->image['url'];
-			if ( array_key_exists( 'width', $this->image ) && array_key_exists( 'height', $this->image ) ) {
-				$t['image:width'] = $this->image['width'];
-				$t['image:height'] = $this->image['height'];
+		if ( isset( $this->image ) && isset( $this->image->url ) ) {
+			$t['image'] = $this->image->url;
+			if ( isset( $this->image->width ) && isset( $this->image->height ) ) {
+				$t['image:width'] = $this->image->width;
+				$t['image:height'] = $this->image->height;
 			}
 		}
 
 		// video on a photo card does not make much sense
-		if ( $this->card !== 'photo' && isset( $this->video ) && array_key_exists( 'url', $this->video ) ) {
-			$t['player'] = $this->video['url'];
-			if ( array_key_exists( 'width', $this->video ) && array_key_exists( 'height', $this->video ) ) {
-				$t['player:width'] = $this->video['width'];
-				$t['player:height'] = $this->video['height'];
+		if ( $this->card !== 'photo' && isset( $this->video ) && isset( $this->video->url ) ) {
+			$t['player'] = $this->video->url;
+			if ( isset( $this->video->width ) && isset( $this->video->height ) ) {
+				$t['player:width'] = $this->video->width;
+				$t['player:height'] = $this->video->height;
 			}
 
 			// no video stream without a main video player. content type required.
-			if ( isset( $this->video_stream ) && array_key_exists( 'url', $this->video_stream ) && array_key_exists( 'type', $this->video_stream ) ) {
-				$t['player:stream'] = $this->video_stream['url'];
-				$t['player:stream:content_type'] = $this->video_stream['type'];
+			if ( isset( $this->video->stream ) && isset( $this->video->stream->url ) && isset( $this->video->stream->type ) ) {
+				$t['player:stream'] = $this->video->stream->url;
+				$t['player:stream:content_type'] = $this->video->stream->type;
 			}
 		}
 
 		// identify the site
-		if ( isset( $this->site ) && is_array( $this->site ) && array_key_exists( 'username', $this->site ) ) {
-			$t['site'] = '@' . $this->site['username'];
-			if ( array_key_exists( 'id', $this->site ) )
-				$t['site:id'] = $this->site['id'];
+		if ( isset( $this->site ) && isset( $this->site->username ) ) {
+			$t['site'] = '@' . $this->site->username;
+			if ( isset( $this->site->id ) )
+				$t['site:id'] = $this->site->id;
 		}
 
 		// 
-		if ( isset( $this->creator ) && is_array( $this->creator ) && array_key_exists( 'username', $this->creator ) ) {
-			$t['creator'] = '@' . $this->creator['username'];
-			if ( array_key_exists( 'id', $this->creator ) )
-				$t['creator:id'] = $this->creator['id'];
+		if ( isset( $this->creator ) && isset( $this->creator->username ) ) {
+			$t['creator'] = '@' . $this->creator->username;
+			if ( isset( $this->creator->id ) )
+				$t['creator:id'] = $this->creator->id;
 		}
 
 		return $t;
