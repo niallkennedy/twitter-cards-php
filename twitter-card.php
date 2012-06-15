@@ -280,7 +280,7 @@ class Twitter_Card {
 	private function required_properties_exist() {
 		if ( ! ( isset( $this->url ) && isset( $this->title ) && isset( $this->description ) ) )
 			return false;
-		if ( $this->card === 'photo' && ! ( isset( $this->image ) && isset( $this->image->url ) ) )
+		if ( in_array( $this->card, array( 'photo', 'player' ), true ) && ! ( isset( $this->image ) && isset( $this->image->url ) ) )
 			return false;
 		if ( $this->card === 'player' && ! ( isset( $this->video ) && isset( $this->video->url ) && isset( $this->video->width ) && isset( $this->video->height ) ) )
 			return false;
