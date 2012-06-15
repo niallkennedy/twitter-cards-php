@@ -5,6 +5,7 @@
  * @since 1.0
  * @author Niall Kennedy <niall@niallkennedy.com>
  * @link https://dev.twitter.com/docs/cards Twitter Card documentation
+ * @link https://github.com/niallkennedy/twitter-cards-php Follow on GitHub
  * @todo add player
  */
 class Twitter_Card {
