@@ -257,7 +257,7 @@ class Twitter_Card {
 		if ( isset( $this->creator ) && is_array( $this->creator ) && array_key_exists( 'username', $this->creator ) ) {
 			$t['creator'] = '@' . $this->creator['username'];
 			if ( array_key_exists( 'id', $this->creator ) )
-				$t['site:id'] = $this->creator['id'];
+				$t['creator:id'] = $this->creator['id'];
 		}
 
 		return $t;
