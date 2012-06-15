@@ -181,6 +181,7 @@ class Twitter_Card {
 
 	/**
 	 * HTTPS URL of an HTML suitable for display in an iframe
+	 * Expected width and height of the iframe are required
 	 * If the iframe width is greater than 435 pixels Twitter will resize to fit a 435 pixel width column
 	 *
 	 * @since 1.0
@@ -189,16 +190,14 @@ class Twitter_Card {
 	 * @param int $height height in pixels preferred by iframe URL
 	 * @return Twitter_Card for chaining
 	 */
-	public function setVideo( $url, $width = 0, $height = 0 ) {
-		if ( ! self::is_https_url( $url ) )
+	public function setVideo( $url, $width, $height ) {
+		if ( ! ( self::is_https_url( $url ) && is_int( $width ) && is_int( $height ) && $width > 0 && $height > 0 ) )
 			return;
 
 		$video = new stdClass();
 		$video->url = $url;
-		if ( is_int( $width ) && is_int( $height ) && $width > 0 && $height >0 ) {
-			$video->width = $width;
-			$video->height = $height;
-		}
+		$video->width = $width;
+		$video->height = $height;
 		$this->video = $video;
 		return $this;
 	}
@@ -283,7 +282,7 @@ class Twitter_Card {
 			return false;
 		if ( $this->card === 'photo' && ! ( isset( $this->image ) && isset( $this->image->url ) ) )
 			return false;
-		if ( $this->card === 'player' && ! ( isset( $this->video ) && isset( $this->video->url ) ) )
+		if ( $this->card === 'player' && ! ( isset( $this->video ) && isset( $this->video->url ) && isset( $this->video->width ) && isset( $this->video->height ) ) )
 			return false;
 		return true;
 	}
