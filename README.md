@@ -57,7 +57,7 @@ By including Twitter Card markup in your `<head>`:
 <?php
 // load Twitter_Card
 if ( ! class_exists( 'Twitter_Card' ) )
-	require_once( dirname( __FILE__ ) . '/class-twitter-card.php' );
+	require_once( dirname( __FILE__ ) . '/twitter-card.php' );
 
 // build a photo card
 $card = new Twitter_Card( 'photo' );
@@ -79,6 +79,38 @@ The title property is intentionally set as blank. In this example Instagram has 
 
 An image is a required property of a photo card. A specified image must be at least 280 pixels wide and 150 pixels tall. Your image may be resized up to a width of 560 pixels; plan your content accordingly.
 
-## Player
+## Player example
 
-Not currently supported. Soon.
+A "player" card creates a video preview from either an HTML iframe or a poster frame. An iframe wider than 435 pixels will be resized to fit a maximum width of 435 pixels.
+
+Create a player card like this:
+
+![Twitter player card example](https://dev.twitter.com/sites/default/files/images_documentation/card-web-player_0.png)
+
+By including Twitter Card markup in your `<head>`:
+
+```php
+<?php
+// load Twitter_Card
+if ( ! class_exists( 'Twitter_Card' ) )
+	require_once( dirname( __FILE__ ) . '/twitter-card.php' );
+
+// build a card
+$card = new Twitter_Card( 'player' );
+$card->setURL( 'http://www.youtube.com/watch?v=AEngFNb5CRU' );
+$card->setTitle( 'Apple - The New iPad' );
+$card->setDescription( 'iPad is a magical window where nothing comes between you and what you love. Now that experience is even more incredible with the new iPad.' );
+$card->setImage( 'http://i2.ytimg.com/vi/AEngFNb5CRU/hqdefault.jpg', 480, 360 );
+$card->setVideo( 'https://www.youtube.com/embed/AEngFNb5CRU', 435, 251 );
+
+// optional
+$card->setSiteAccount( 'youtube', '10228272' );
+
+// echo a string of <meta> elements
+echo $card->asHTML();
+?>
+```
+
+An image is a required property of a photo card. Minimum and maximum dimensions are presumed to be the same as a photo card: 200x150 resized up to max width of 560 pixels.
+
+Player URL must be HTTPS to prevent mixed content warnings.
