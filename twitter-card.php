@@ -387,7 +387,7 @@ class Twitter_Card {
 			$flag = ENT_XHTML;
 		else if ( defined( 'ENT_HTML5' ) )
 			$flag = ENT_HTML5;
-		return '<meta name="' . self::PREFIX . ':' . htmlspecialchars( $name, $flag ) . '" value="' . htmlspecialchars( $value, $flag ) . '"' . ( $xml === true ? ' />' : '>' );
+		return '<meta name="' . self::PREFIX . ':' . htmlspecialchars( $name, $flag ) . '" content="' . htmlspecialchars( $value, $flag ) . '"' . ( $xml === true ? ' />' : '>' );
 	}
 
 	/**
