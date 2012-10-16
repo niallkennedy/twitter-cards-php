@@ -162,7 +162,7 @@ class Twitter_Card {
 	public function setDescription( $description ) {
 		if ( is_string( $description ) ) {
 			$description = trim( $description );
-			if ( $description )
+			if ( $description || $this->card === 'photo' )
 				$this->description = $description;
 		}
 		return $this;
