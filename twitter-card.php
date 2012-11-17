@@ -3,7 +3,7 @@
  * Describe a page in Twitter Card markup
  *
  * @since 1.0
- * @version 1.01
+ * @version 1.02
  * @author Niall Kennedy <niall@niallkennedy.com>
  * @link https://dev.twitter.com/docs/cards Twitter Card documentation
  * @link https://github.com/niallkennedy/twitter-cards-php Follow on GitHub
@@ -15,7 +15,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var string
 	 */
-	const VERSION = '1.01';
+	const VERSION = '1.02';
 
 	/**
 	 * Twitter prefix
@@ -302,10 +302,18 @@ class Twitter_Card {
 	 * @return bool true if all required properties exist for the specified type, else false
 	 */
 	private function required_properties_exist() {
-		if ( ! ( isset( $this->url ) && isset( $this->title ) && isset( $this->description ) ) )
+		if ( ! ( isset( $this->url ) && isset( $this->title ) ) )
 			return false;
+
+		// description required for summary & video but not photo
+		if ( ! isset( $this->description ) && $this->card !== 'photo' )
+			return false;
+
+		// image optional for summary
 		if ( in_array( $this->card, array( 'photo', 'player' ), true ) && ! ( isset( $this->image ) && isset( $this->image->url ) ) )
 			return false;
+
+		// video player needs a video
 		if ( $this->card === 'player' && ! ( isset( $this->video ) && isset( $this->video->url ) && isset( $this->video->width ) && isset( $this->video->height ) ) )
 			return false;
 		return true;
@@ -324,9 +332,11 @@ class Twitter_Card {
 		$t = array(
 			'card' => $this->card,
 			'url' => $this->url,
-			'title' => $this->title,
-			'description' => $this->description
+			'title' => $this->title
 		);
+
+		if ( isset( $this->description ) )
+			$t['description'] = $this->description;
 
 		// add an image
 		if ( isset( $this->image ) && isset( $this->image->url ) ) {
