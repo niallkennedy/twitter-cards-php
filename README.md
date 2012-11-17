@@ -4,7 +4,9 @@
 
 The Twitter_Cards PHP class helps you build Twitter Card markup for your website. Build a summary or photo card, set the appropriate attributes, and build `<meta>` elements suitable for output inside your (x)HTML document `<head>`.
 
-Note: As of June 2012 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
+Note: As of November 2012 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
+
+Test your markup and/or URLs using in the [Twitter Card preview tool](https://dev.twitter.com/docs/cards/preview).
 
 ## Summary example
 
@@ -80,6 +82,8 @@ echo $card->asHTML();
 The title property is intentionally set as blank. In this example Instagram has a photo description but no title.
 
 An image is a required property of a photo card. A specified image must be at least 280 pixels wide and 150 pixels tall. Your image may be resized up to a width of 560 pixels; plan your content accordingly.
+
+The description property is optional.
 
 ## Player example
 
