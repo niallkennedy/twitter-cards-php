@@ -15,7 +15,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var string
 	 */
-	const VERSION = '1.02';
+	const VERSION = '1.03';
 
 	/**
 	 * Twitter prefix
@@ -31,7 +31,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var array
 	 */
-	public static $allowed_card_types = array( 'summary', 'photo', 'player' );
+	public static $allowed_card_types = array( 'summary' => true, 'photo' => true, 'player' => true );
 
 	/**
 	 * Only allow HTTP and HTTPs schemes in URLs
@@ -39,7 +39,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var array
 	 */
-	public static $allowed_schemes = array( 'http', 'https' );
+	public static $allowed_schemes = array( 'http' => true, 'https' => true );
 
 	/**
 	 * Create a new Twitter Card object, optionally overriding the default card type of "summary"
@@ -48,7 +48,7 @@ class Twitter_Card {
 	 * @param string $card_type The card type. one of "summary", "photo", "player"
 	 */
 	public function __construct( $card_type = '' ) {
-		if ( is_string( $card_type ) && in_array( $card_type, self::$allowed_card_types, true ) )
+		if ( is_string( $card_type ) && isset( self::$allowed_card_types[$card_type] ) )
 			$this->card = $card_type;
 		else
 			$this->card = 'summary';
@@ -101,8 +101,8 @@ class Twitter_Card {
 		} else {
 			$schemes = array();
 			foreach ( $allowed_schemes as $scheme ) {
-				if ( in_array( $scheme, self::$allowed_schemes, true ) )
-					$schemes[] = $scheme;
+				if ( isset( self::$allowed_schemes[$scheme] ) )
+					$schemes[$scheme] = true;
 			}
 
 			if ( empty( $schemes ) )
@@ -112,7 +112,7 @@ class Twitter_Card {
 		// parse_url will test scheme + full URL validity vs. just checking if string begins with "https://"
 		try {
 			$scheme = parse_url( $url, PHP_URL_SCHEME );
-			if ( is_string( $scheme ) && in_array( strtolower( $scheme ), $schemes, true ) )
+			if ( is_string( $scheme ) && isset( $schemes[ strtolower( $scheme ) ] ) )
 				return true;
 		} catch( Exception $e ) {} // E_WARNING in PHP < 5.3.3
 
