@@ -3,7 +3,7 @@
  * Describe a page in Twitter Card markup
  *
  * @since 1.0
- * @version 1.02
+ * @version 1.03
  * @author Niall Kennedy <niall@niallkennedy.com>
  * @link https://dev.twitter.com/docs/cards Twitter Card documentation
  * @link https://github.com/niallkennedy/twitter-cards-php Follow on GitHub
