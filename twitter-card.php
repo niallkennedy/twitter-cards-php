@@ -3,7 +3,7 @@
  * Describe a page in Twitter Card markup
  *
  * @since 1.0
- * @version 1.03
+ * @version 1.1
  * @author Niall Kennedy <niall@niallkennedy.com>
  * @link https://dev.twitter.com/docs/cards Twitter Card documentation
  * @link https://github.com/niallkennedy/twitter-cards-php Follow on GitHub
@@ -15,7 +15,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var string
 	 */
-	const VERSION = '1.03';
+	const VERSION = '1.1';
 
 	/**
 	 * Twitter prefix
@@ -31,7 +31,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var array
 	 */
-	public static $allowed_card_types = array( 'summary' => true, 'photo' => true, 'player' => true );
+	public static $allowed_card_types = array( 'summary' => true, 'photo' => true, 'gallery' => true, 'player' => true, 'product' => true, 'app' => true );
 
 	/**
 	 * Only allow HTTP and HTTPs schemes in URLs
