@@ -4,7 +4,9 @@
 
 The Twitter_Cards PHP class helps you build Twitter Card markup for your website. Build a summary or photo card, set the appropriate attributes, and build `<meta>` elements suitable for output inside your (x)HTML document `<head>`.
 
-Note: As of November 2012 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
+Note: As of April 2013 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
+
+This PHP does not currently support the new properties of [gallery](https://dev.twitter.com/docs/cards/types/gallery-card "Twitter gallery card") (image[0-3]), [app](https://dev.twitter.com/docs/cards/types/app-card "Twitter app card") (Apple App Store and Google Play app IDs), or [product](https://dev.twitter.com/docs/cards/types/product-card "Twitter product card") (data[1|2],label[1|2]).
 
 Test your markup and/or URLs using in the [Twitter Card preview tool](https://dev.twitter.com/docs/cards/preview).
 
@@ -14,8 +16,8 @@ A Twitter Card is a "summary" by default.
 
 Create a summary card like this:
 
-![Twitter summary example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-summary_0.png)
-![Twitter summary example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-mobile-summary_0.png)
+![Twitter summary example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_summary_1.png)
+![Twitter summary example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_summary.png)
 
 By including Twitter Card markup in your `<head>`:
 
@@ -52,8 +54,8 @@ A "photo" card takes advantage of the full width of the content area.
 
 Create a photo card like this:
 
-![Twitter Card photo example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-photo_0_0.png)
-![Twitter Card photo example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-mobile-photo_0_0.png)
+![Twitter Card photo example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_photo.png)
+![Twitter Card photo example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_photo.png)
 
 By including Twitter Card markup in your `<head>`:
 
@@ -91,8 +93,8 @@ A "player" card creates a video preview from either an HTML iframe or a poster f
 
 Create a player card like this:
 
-![Twitter player card example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/card-web-player_0.png)
-![Twitter player card example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/mobile-player_0.png)
+![Twitter player card example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_player2.png)
+![Twitter player card example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_player.png)
 
 By including Twitter Card markup in your `<head>`:
 
@@ -118,6 +120,6 @@ echo $card->asHTML();
 ?>
 ```
 
-An image is a required property of a photo card. Minimum and maximum dimensions are presumed to be the same as a photo card: 200x150 resized up to max width of 560 pixels.
+An image is a required property of a photo card. An image must have at least 68,600 pixels.
 
 Player URL must be HTTPS to prevent mixed content warnings.
