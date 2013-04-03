@@ -14,7 +14,7 @@ Test your markup and/or URLs using in the [Twitter Card preview tool](https://de
 
 A Twitter Card is a "summary" by default.
 
-Create a summary card like this:
+Create [a summary card](https://dev.twitter.com/docs/cards/types/summary-card "Twitter documentation summary card") like this:
 
 ![Twitter summary example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_summary_1.png)
 ![Twitter summary example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_summary.png)
@@ -52,7 +52,7 @@ Images must be at least 60x60 pixels. Images larger than 120x120 pixels will be 
 
 A "photo" card takes advantage of the full width of the content area.
 
-Create a photo card like this:
+Create [a photo card](https://dev.twitter.com/docs/cards/types/photo-card "Twitter photo card documentation") like this:
 
 ![Twitter Card photo example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_photo.png)
 ![Twitter Card photo example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_photo.png)
@@ -91,7 +91,7 @@ The description property is optional.
 
 A "player" card creates a video preview from either an HTML iframe or a poster frame. An iframe wider than 435 pixels will be resized to fit a maximum width of 435 pixels.
 
-Create a player card like this:
+Create [a player card](https://dev.twitter.com/docs/cards/types/player-card "Twitter player card documentation") like this:
 
 ![Twitter player card example from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/web_player2.png)
 ![Twitter player card example for mobile from dev.twitter.com](https://dev.twitter.com/sites/default/files/images_documentation/ios_player.png)
