@@ -4,7 +4,7 @@
 
 The Twitter_Cards PHP class helps you build Twitter Card markup for your website. Build a summary or photo card, set the appropriate attributes, and build `<meta>` elements suitable for output inside your (x)HTML document `<head>`.
 
-Note: As of April 2013 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
+Note: As of May 2013 Twitter Card display on Twitter.com or its applications requires [whitelisting domains](https://dev.twitter.com/form/participate-twitter-cards "request Twitter Card domain whitelist inclusion").
 
 This PHP does not currently support the new properties of [gallery](https://dev.twitter.com/docs/cards/types/gallery-card "Twitter gallery card") (image[0-3]), [app](https://dev.twitter.com/docs/cards/types/app-card "Twitter app card") (Apple App Store and Google Play app IDs), or [product](https://dev.twitter.com/docs/cards/types/product-card "Twitter product card") (data[1|2],label[1|2]).
 

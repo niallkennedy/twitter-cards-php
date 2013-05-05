@@ -15,7 +15,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var string
 	 */
-	const VERSION = '1.1';
+	const VERSION = '1.1.1';
 
 	/**
 	 * Twitter prefix
@@ -31,7 +31,7 @@ class Twitter_Card {
 	 * @since 1.0
 	 * @var array
 	 */
-	public static $allowed_card_types = array( 'summary' => true, 'photo' => true, 'gallery' => true, 'player' => true, 'product' => true, 'app' => true );
+	public static $allowed_card_types = array( 'summary' => true, 'large_image_summary' => true, 'photo' => true, 'gallery' => true, 'player' => true, 'product' => true, 'app' => true );
 
 	/**
 	 * Only allow HTTP and HTTPs schemes in URLs
@@ -192,7 +192,7 @@ class Twitter_Card {
 				return $this;
 
 			// minimum dimensions for photo cards
-			if ( in_array( $this->card, array( 'photo', 'player' ), true ) && ( $width < 280 || $height < 150 ) )
+			if ( in_array( $this->card, array( 'large_image_summary', 'photo', 'player' ), true ) && ( $width < 280 || $height < 150 ) )
 				return $this;
 
 			$image->width = $width;
