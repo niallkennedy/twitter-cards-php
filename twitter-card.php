@@ -416,7 +416,7 @@ class Twitter_Card {
 			return '';
 		$s = '';
 		foreach ( $t as $name => $value ) {
-			$s .= self::build_meta_element( $name, $value, $xml );
+			$s .= self::build_meta_element( $name, $value, $xml ).PHP_EOL;
 		}
 		return $s;
 	}
