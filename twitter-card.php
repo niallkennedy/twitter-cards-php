@@ -1,4 +1,5 @@
 <?php
+namespace Niall\TwitterCards;
 /**
  * Describe a page in Twitter Card markup
  *
