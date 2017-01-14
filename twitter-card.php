@@ -427,7 +427,7 @@ class Twitter_Card {
 	 *
 	 * @return string HTML <meta> elements or empty string if minimum requirements not met for card type
 	 */
-	public function asHTML() {
+	public function toHTML() {
 		return $this->generate_markup();
 	}
 
