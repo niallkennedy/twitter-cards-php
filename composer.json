@@ -1,0 +1,19 @@
+{
+"name":"niallkennedy/twitter-cards-php",
+"homepage": "https://github.com/niallkennedy/twitter-cards-php",
+"authors": [
+  {
+  "name": "Niall Kennedy",
+  "homepage": "http://www.niallkennedy.com/blog/"
+  }
+],
+  "autoload": {
+	"psr-4": {
+	    "Niall\\TwitterCards\\": "."
+	}
+    },
+"minimum-stability": "dev",
+"require": {
+  "php": ">=4"
+}
+}
